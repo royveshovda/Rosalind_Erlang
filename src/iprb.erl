@@ -1,8 +1,5 @@
 -module(iprb).
--export([prob/3, test/0]).
-
-test()->
-	prob(20, 30, 20).
+-export([prob/3]).
 
 prob(K, M, N) ->
 	Sum = K + M + N,
