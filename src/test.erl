@@ -9,4 +9,5 @@ test() ->
 	eunit:test(hamm),
 	eunit:test(prot),
 	eunit:test(subs),
-	eunit:test(fib).
+	eunit:test(fib),
+	eunit:test(iprb).
