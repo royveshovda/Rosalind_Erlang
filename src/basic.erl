@@ -34,6 +34,8 @@ remove_line_breaks(String) ->
 
 remove_line_breaks([], RemovedString) ->
 	lists:reverse(RemovedString);
+remove_line_breaks([$\r|Rest], RemovedString) ->
+	remove_line_breaks(Rest, RemovedString);
 remove_line_breaks([$\n|Rest], RemovedString) ->
 	remove_line_breaks(Rest, RemovedString);
 remove_line_breaks([Character|Rest], RemovedString) ->
@@ -51,7 +53,8 @@ split_id_from_content([<<>>|Rest], SplittedList) ->
 	split_id_from_content(Rest, SplittedList);
 split_id_from_content([Binary|Rest], SplittedList) ->
 	[BinaryId, BinaryContent] = binary:split(Binary, <<$\n>>),
-	Id = binary:bin_to_list(BinaryId),
+	Raw_Id = binary:bin_to_list(BinaryId),
+	Id = remove_line_breaks(Raw_Id),
 	%TODO: Try to improve this to not use convertion to string. Pure binary will use less memory, and probably be faster
 	StringContent = binary:bin_to_list(BinaryContent),
 	TrimmedString = remove_line_breaks(StringContent),
@@ -187,5 +190,3 @@ protein_to_string([protein_y | Rest], Protein) ->
 	protein_to_string(Rest, [$Y|Protein]);
 protein_to_string([protein_stop | Rest], Protein) ->
 	protein_to_string(Rest, [$.|Protein]).
-
-
