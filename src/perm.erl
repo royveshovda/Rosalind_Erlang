@@ -1,5 +1,5 @@
 -module(perm).
--export([generate/1, test/0]).
+-export([generate/1, print_perms/1, test/0]).
 
 test() ->
 	Perms = generate(5),
