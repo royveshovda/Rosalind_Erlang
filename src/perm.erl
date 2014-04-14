@@ -2,24 +2,33 @@
 -export([generate/1, test/0]).
 
 test() ->
-	generate(3).
+	Perms = generate(5),
+	print_perms(Perms).
 
 generate(N) ->
-	BaseList = get_list_of_all_numbers(N),
-	Perm = generate(BaseList, []).
+	BaseList = lists:seq(1,N),
+	perms(BaseList).
 
-generate([],Perm) ->
-	Perm;
-generate(List, Perm) ->
-	Length = length(List).
+perms([]) -> [[]];
+perms(L)  -> [[H|T] || H <- L, T <- perms(L--[H])].
 
-generate(List, Position, Length, Perm) ->
-	ok.
+print_perms(Perms) ->
+	print_perms_count(Perms),
+	print_perms_array(Perms).
 
-get_list_of_all_numbers(N) ->
-	get_list_of_all_numbers(N, []).
+print_perms_count(Perms) ->
+	Length = length(Perms),
+	io:format("~p~n", [Length]).
 
-get_list_of_all_numbers(0,List) ->
-	List;
-get_list_of_all_numbers(N, List) ->
-	get_list_of_all_numbers(N-1, [N | List]).
+print_perms_array([]) ->
+	void;
+print_perms_array([Head|Rest]) ->
+	print_perms_list(Head),
+	io:format("~n", []),
+	print_perms_array(Rest).
+
+print_perms_list([]) ->
+	void;
+print_perms_list([Head|Rest]) ->
+	io:format("~p ", [Head]),
+	print_perms_list(Rest).
