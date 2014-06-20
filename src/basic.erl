@@ -1,5 +1,5 @@
 -module(basic).
--export([string_to_dna/1, dna_to_string/1, print_dna/1, open_fasta_file/1, string_to_rna/1, rna_to_string/1, string_to_protein/1, protein_to_string/1]).
+-export([string_to_dna/1, dna_to_string/1, print_dna/1, print_protein/1, open_fasta_file/1, string_to_rna/1, rna_to_string/1, string_to_protein/1, protein_to_string/1]).
 
 string_to_dna(String) ->
 	string_to_dna(String, []).
@@ -94,6 +94,13 @@ print_dna(Dna) ->
 
 print_dna_string(DnaString) ->
 	io:format("~s~n",[DnaString]).
+
+print_protein(Protein) ->
+	String = protein_to_string(Protein),
+	print_protein_string(String).
+
+print_protein_string(ProteinString) ->
+	io:format("~s~n",[ProteinString]).	
 
 string_to_protein(ProteinString) ->
 	string_to_protein(ProteinString, []).

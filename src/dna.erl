@@ -5,7 +5,7 @@ count(Dna) ->
 	count(Dna,0,0,0,0).
 
 count([], A, C, G, T) ->
-	{count, A, C, G, T};
+	{counted, A, C, G, T};
 count([dna_a|Rest], A, C, G, T) ->
 	count(Rest, A+1, C, G, T);
 count([dna_c|Rest], A, C, G, T) ->
