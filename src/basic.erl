@@ -1,5 +1,8 @@
 -module(basic).
--export([string_to_dna/1, dna_to_string/1, print_dna/1, print_protein/1, open_fasta_file/1, string_to_rna/1, rna_to_string/1, string_to_protein/1, protein_to_string/1]).
+-export([string_to_dna/1, dna_to_string/1, print_dna/1, print_protein/1, open_fasta_file/1, string_to_rna/1, rna_to_string/1, string_to_protein/1, protein_to_string/1, remove_dups/1]).
+
+remove_dups([])    -> [];
+remove_dups([H|T]) -> [H | [X || X <- remove_dups(T), X /= H]].
 
 string_to_dna(String) ->
 	string_to_dna(String, []).

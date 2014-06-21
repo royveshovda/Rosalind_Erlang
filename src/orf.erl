@@ -75,12 +75,8 @@ find_orfs(Dna) ->
 	Proteins = lists:map(fun(X) -> dna_to_protein:translate(X) end, DnaFrames),
 	SplittedProteins = split_proteins(Proteins),
 	Orfs = find_orf_proteins(SplittedProteins),
-	SingleOrfs = remove_dups(Orfs),
+	SingleOrfs = basic:remove_dups(Orfs),
 	SingleOrfs.
-
-
-remove_dups([])    -> [];
-remove_dups([H|T]) -> [H | [X || X <- remove_dups(T), X /= H]].
 
 split_proteins(ListOfProteins) ->
 	split_proteins(ListOfProteins, []).
