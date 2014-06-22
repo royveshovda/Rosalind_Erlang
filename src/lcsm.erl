@@ -1,14 +1,46 @@
 -module(lcsm).
--export([test/0]).
+-export([test/0, test2/0]).
+
+test2() ->
+	%generate_substrings([1,2,3,4]).
+	Filename = "../testdata/rosalind_lcsm.txt",
+	Dnas = basic:open_fasta_file(Filename),
+	[{_Id1, Dna1}|_Rest] = Dnas,
+	Potentials = generate_substrings(Dna1),
+	length(Potentials).
+
 
 test() ->
 	Filename = "../testdata/rosalind_lcsm.txt",
 	Dnas = basic:open_fasta_file(Filename),
 	[{_Id1, Dna1}|Rest] = Dnas,
-	Potentials = generate_all_substrings(Dna1),
-	length(Potentials).
-	%Longest = find_longest_common(Rest, Potentials),
-	%basic:dna_to_string(Longest).
+	Potentials = generate_substrings(Dna1),
+	%length(Potentials).
+	Longest = find_longest_common(Rest, Potentials),
+	basic:dna_to_string(Longest).
+
+generate_substrings(List) ->
+	generate_substrings(List, []).
+
+generate_substrings([], SubLists) ->
+	SubLists;
+generate_substrings([Head|Tail], SubLists) ->
+	NewSubLists = generate_combinations(Head, Tail, []),
+	generate_substrings(Tail, NewSubLists ++ SubLists).
+
+generate_combinations(Head, [], Combinations) ->
+	[[Head]|Combinations];
+generate_combinations(Head, Tail, Combinations) ->
+	NewCombinations = [[Head|Tail]|Combinations],
+	NewTail = cut_last_element(Tail),
+	generate_combinations(Head, NewTail, NewCombinations).
+
+cut_last_element(List) when length(List) =< 1 ->
+	[];
+cut_last_element(List) ->
+	Length = length(List),
+	lists:sublist(List,1,Length-1).
+
 
 find_longest_common(Dnas, Potentials) ->
 	CommonStrings = find_all_common_with_all_dnas(Dnas, Potentials),
@@ -44,22 +76,6 @@ find_longest_list([Candidate | Rest], Longest) when length(Candidate) > length(L
 	find_longest_list(Rest, Candidate);
 find_longest_list([Candidate | Rest], Longest) when length(Candidate) =< length(Longest) ->
 	find_longest_list(Rest, Longest).
-
-
-%TODO: Too slow
-generate_all_substrings(List) ->
-	generate_all_substrings(List, []).
-
-generate_all_substrings([], Acc) ->
-	Acc2 = basic:remove_dups(Acc),
-	lists:reverse(Acc2);
-generate_all_substrings(List, Acc) ->	
-	[_H|T] = List,
-	Subs = generate_all_substrings(T),
-	NewAcc = [List|Acc] ++ Subs,
-	[_ReverseH|ReverseT] = lists:reverse(List),
-	Head = lists:reverse(ReverseT),
-	generate_all_substrings(Head, NewAcc).
 
 % expand the first string, and get all possible substrings
 
