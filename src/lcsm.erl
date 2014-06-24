@@ -1,13 +1,29 @@
 -module(lcsm).
--export([test/0, test2/0]).
+-export([test/0, test2/0, test3/0]).
+
+test3() ->
+	List = [1,2,3,4,5,6],
+	Match1 = [3,4],
+	Match2 = [3,5],
+	true = contains(List, Match1),
+	false = contains(List, Match2),
+	perfect.
 
 test2() ->
 	%generate_substrings([1,2,3,4]).
 	Filename = "../testdata/rosalind_lcsm.txt",
 	Dnas = basic:open_fasta_file(Filename),
-	[{_Id1, Dna1}|_Rest] = Dnas,
+	[{_Id1, Dna1}|Rest] = Dnas,
+	[{_Id2, Dna2}|_Rest] = Rest,
+
 	Potentials = generate_substrings(Dna1),
-	length(Potentials).
+	io:format("Potentials: ~p~n", [length(Potentials)]),
+
+	Filtered = basic:remove_dups(Potentials),
+	io:format("Filtered: ~p~n", [length(Filtered)]).
+	%.
+
+	%find_all_common_with_one_dna(Dna2, Potentials).
 
 
 test() ->
@@ -59,10 +75,11 @@ find_all_common_with_one_dna(Dna, Potentials) ->
 find_all_common_with_one_dna(_Dna, [], Acc) ->
 	Acc;
 find_all_common_with_one_dna(Dna, [Candidate|RestOfTheCandidates], Acc) ->
-	case subs:motif(Dna, Candidate) of
-		[] ->
+	io:format("~p~n", [length(RestOfTheCandidates)]),
+	case contains(Dna, Candidate) of
+		false ->
 			find_all_common_with_one_dna(Dna, RestOfTheCandidates, Acc);
-		_ ->
+		true ->
 			find_all_common_with_one_dna(Dna, RestOfTheCandidates, [Candidate|Acc])
 	end.
 
@@ -84,3 +101,24 @@ find_longest_list([Candidate | Rest], Longest) when length(Candidate) =< length(
 % save candidates along the way
 
 % compare all the candidates, and return the longest
+
+
+contains(List, Match) ->
+	contains(List, Match, 1).
+
+contains([], _Match, _Position) ->
+	false;
+contains(Content, Match, Position) ->
+	LengthMatch = length(Match),
+	LengthContent = length(Content),
+	if
+		LengthContent - Position < LengthMatch -> false;
+		LengthContent - Position >= LengthMatch ->
+			SubContent = lists:sublist(Content, Position, LengthMatch),
+			case SubContent =:= Match of
+				true ->
+					true;
+				false ->
+					contains(Content, Match, Position+1)
+			end
+	end.
