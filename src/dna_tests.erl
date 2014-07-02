@@ -3,6 +3,6 @@
 
 count_test() ->
 	DnaString = "AGCTTTTCATTCTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATAGCAGC",
-	Dna = basic:string_to_dna(DnaString),
+	Dna = convert:string_to_dna(DnaString),
 	{counted, 20, 12, 17, 21} = dna:count(Dna),
 	ok.

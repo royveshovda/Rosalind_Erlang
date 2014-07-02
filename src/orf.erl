@@ -56,17 +56,18 @@ test2() ->
 	Orfs = find_orfs(Dna),
 
 
-	file:delete(OutFilename),
+	ok = file:delete(OutFilename),
 	{ok, IoDevice} = file:open(OutFilename, [write]),
-	lists:map(fun(X) -> append_protein_to_file(X, IoDevice) end, Orfs),
+	[ok] = lists:map(fun(X) -> append_protein_to_file(X, IoDevice) end, Orfs),
 
 
 	ok.
 
 append_protein_to_file(Protein, IoDevice) ->
-	ProteinString = basic:protein_to_string(Protein),
-	file:write(IoDevice, ProteinString),
-	file:write(IoDevice, "\n").
+	ProteinString = convert:protein_to_string(Protein),
+	ok = file:write(IoDevice, ProteinString),
+	ok = file:write(IoDevice, "\n"),
+	ok.
 
 
 

@@ -24,21 +24,19 @@ find_graph_matches(Id, Dna, [{Id2, Dna2} | ListOfDnas], Overlap_count, Graph) ->
 
 match_dnas(Id1, Dna1, Id2, Dna2, Overlap_count, Graph) ->
 	Match1 = is_direct_graph(Dna1, Dna2, Overlap_count),
-	if
-		Match1 == true ->
-			New_Graph1 = [{Id2, Id1} | Graph];
-		Match1 == false ->
-			New_Graph1 = Graph
-	end,
+	New_Graph1 = get_new_graph(Match1, Id2, Id1, Graph),
 
 	Match2 = is_direct_graph(Dna2, Dna1, Overlap_count),
-	if
-		Match2 == true ->
-			New_Graph2 = [{Id1, Id2} | New_Graph1];
-		Match2 == false ->
-			New_Graph2 = New_Graph1
-	end,
+
+	New_Graph2 = get_new_graph(Match2, Id1, Id2, New_Graph1),
 	New_Graph2.
+
+
+get_new_graph(true, IdFirst, IdLast, Graph) ->
+	[{IdFirst, IdLast} | Graph];
+get_new_graph(false, _IdFirst, _IdLast, Graph) ->
+	Graph.
+
 
 is_direct_graph(Dna1, Dna2, Overlap_count) ->
 	Sub_Dna1 = lists:sublist(Dna1, Overlap_count),

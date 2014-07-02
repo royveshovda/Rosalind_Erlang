@@ -2,8 +2,8 @@
 -export([complementing/1, complementing_test/0]).
 
 complementing_test() ->
-	TestInput = basic:string_to_dna("AAAACCCGGT"),
-	Expected = basic:string_to_dna("ACCGGGTTTT"),
+	TestInput = convert:string_to_dna("AAAACCCGGT"),
+	Expected = convert:string_to_dna("ACCGGGTTTT"),
 	Actual = complementing(TestInput),
 	{complementary, Expected} = Actual,
 	ok.

@@ -1,0 +1,3 @@
+{application, rosalind,
+[{vsn, "1.0.0"}
+]}.

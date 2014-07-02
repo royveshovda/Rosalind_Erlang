@@ -1,5 +1,5 @@
 -module(sign).
--export([generate/1, flatten_perms/1, test/0]).
+-export([generate/1, test/0]).
 
 
 test() ->

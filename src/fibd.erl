@@ -1,5 +1,5 @@
 -module(fibd).
--export([wabbits/2, wab/2]).
+-export([wabbits/2]).
 
 wabbits(Months, MonthsEachRabbitWillLive) ->
 	L = [{2,1}, {1,1}, {0,0}],

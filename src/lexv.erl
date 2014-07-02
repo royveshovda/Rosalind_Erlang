@@ -47,8 +47,8 @@ remove_trailing_empties_from_list1([Head|Tail], _Pad) ->
 %remove words with Ø in the middle
 
 
-print([]) ->
-	ok;
-print([Head|Tail]) ->
-	io:format("~s~n", [Head]),
-	print(Tail).
+% print([]) ->
+% 	ok;
+% print([Head|Tail]) ->
+% 	io:format("~s~n", [Head]),
+% 	print(Tail).

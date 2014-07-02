@@ -1,5 +1,5 @@
 -module(main).
--export([init/0, stop/0, count_dna/1, loop/0, get_test/0, convert_dna_string/1]).
+-export([init/0, stop/0, count_dna/1, loop/0, convert_dna_string/1]).
 -define(ROSALIND, rosalind_main).
 
 init() ->
@@ -47,7 +47,7 @@ loop() ->
 			Pid ! {dna_counted, Ref, Result},
 			loop();
 		{Pid, Ref, dna, convert_string, DnaString} ->
-			Result = basic:string_to_dna(DnaString),
+			Result = convert:string_to_dna(DnaString),
 			Pid ! {dna_converted, Ref, Result},
 			loop()
 	end.

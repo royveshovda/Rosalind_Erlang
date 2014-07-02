@@ -23,7 +23,7 @@ max_gc_sum([{Id, Sum} | SumDataTail], MaxId, MaxSum) ->
 		Sum < MaxSum -> max_gc_sum(SumDataTail, MaxId, MaxSum)
 	end.
 
-make_gc_sum({count, 0, 0, 0, 0}) ->
+make_gc_sum({counted, 0, 0, 0, 0}) ->
 	0;
-make_gc_sum({count, A, C, G, T}) ->
+make_gc_sum({counted, A, C, G, T}) ->
 	((G+C) / (A+C+G+T))*100.0.

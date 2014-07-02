@@ -12,74 +12,37 @@ search_file(Filename) ->
 	%Dna = basic:string_to_dna("TCAATGCATGCGGGTCTATATGCAT"),
 	search(Dna).
 
+
+
 search(Dna) ->
 	search(Dna, 1, []).
 
 search(Dna, Position, Findings) when Position + 4 > (length(Dna)+1) ->
 	lists:reverse(Findings);
 search(Dna, Position, Findings) when Position + 4 =< (length(Dna)+1) ->
-	L4 = lists:sublist(Dna,Position,4),
-	case is_revese_palindrome(L4) of
-		true ->
-			F4 = [{Position, 4} | Findings];
-		false ->
-			F4 = Findings
-	end,
-
-	if
-		Position + 6 =< (length(Dna)+1) ->
-			L6 = lists:sublist(Dna,Position,6),
-			case is_revese_palindrome(L6) of
-				true ->
-					F6 = [{Position, 6} | F4];
-				false ->
-					F6 = F4
-			end;
-		Position + 6 > length(Dna) ->
-			F6 = F4
-	end,
-
-	if
-		Position + 8 =< (length(Dna)+1) ->
-			L8 = lists:sublist(Dna,Position,8),
-			case is_revese_palindrome(L8) of
-				true ->
-					F8 = [{Position, 8} | F6];
-				false ->
-					F8 = F6
-			end;
-		Position + 8 > length(Dna) ->
-			F8 = F6
-	end,
-
-	if
-		Position + 10 =< (length(Dna)+1) ->
-			L10 = lists:sublist(Dna,Position,10),
-			case is_revese_palindrome(L10) of
-				true ->
-					F10 = [{Position, 10} | F8];
-				false ->
-					F10 = F8
-			end;
-		Position + 10 > length(Dna) ->
-			F10 = F8
-	end,
-
-	if
-		Position + 12 =< (length(Dna)+1) ->
-			L12 = lists:sublist(Dna,Position,12),
-			case is_revese_palindrome(L12) of
-				true ->
-					F12 = [{Position, 12} | F10];
-				false ->
-					F12 = F10
-			end;
-		Position + 12 > length(Dna) ->
-			F12 = F10
-	end,
+	F4 = get_new_findings_based_on_length(Position, 4, Dna, Findings),
+	F6 = get_new_findings_based_on_length(Position, 6, Dna, F4),
+	F8 = get_new_findings_based_on_length(Position, 8, Dna, F6),
+	F10 = get_new_findings_based_on_length(Position, 10, Dna, F8),
+	F12 = get_new_findings_based_on_length(Position, 12, Dna, F10),
 	search(Dna, Position+1, F12).
 
+get_new_findings_based_on_length(Position, Length, Dna, Findings) when (Position + Length) =< (length(Dna)+1) ->
+	SubList = lists:sublist(Dna,Position,Length),
+	Is = is_revese_palindrome(SubList),
+	New_Findings = get_new_findings(Is, Findings, Position, Length),
+	New_Findings;
+get_new_findings_based_on_length(_Position, _Length, _Dna, Findings) when (_Position + _Length) > (length(_Dna)+1) ->
+	Findings.
 
+
+
+get_new_findings(true, Findings, Position, Length) ->
+	[{Position, Length} | Findings];
+get_new_findings(false, Findings, _Position, _Length) ->
+	Findings.
+
+%add_to_findings(true, Position, )
 
 print_findings([]) ->
 	ok;
