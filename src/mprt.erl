@@ -1,14 +1,6 @@
 -module(mprt).
 -export([test/0, run/0]).
 
-% get_ids_for_test() ->
-% 	[
-% 		"A2Z669",
-% 		"B5ZC00",
-% 		"P07204_TRBM_HUMAN",
-% 		"P20840_SAG1_YEAST"
-% 	].
-
 get_ids() ->
 	[
 		"P05155_IC1_HUMAN",
