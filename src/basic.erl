@@ -1,5 +1,5 @@
 -module(basic).
--export([print_dna/1, print_protein/1, open_fasta_file/1, remove_dups/1]).
+-export([print_dna/1, print_protein/1, open_fasta_file/1, remove_dups/1, remove_line_breaks/1]).
 
 -spec print_dna(types:dnas()) -> ok.
 -spec print_protein(types:proteins()) -> ok.
