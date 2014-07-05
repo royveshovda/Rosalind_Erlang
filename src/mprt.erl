@@ -89,7 +89,7 @@ download_uniprot_fasta(Id) ->
  	download(Host, {location, Location}) ->
  		download(Host, {url, Host ++ Location});
  	download(Host, {url, Url}) ->
- 		start_inets(),
+ 		ok = start_inets(),
  		case httpc:request(get, {Url,[]}, [{autoredirect, false}], []) of
 			{ok, {{_Version, 200, _ReasonPhrase}, _Headers, Body}} ->
 				Body;
