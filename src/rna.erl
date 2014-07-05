@@ -1,6 +1,8 @@
 -module(rna).
 -export([transcribe/1]).
 
+-spec transcribe(types:dnas()) -> types:rnas().
+
 transcribe(Dna) ->
 	transcribe(Dna, []).
 

@@ -1,12 +1,23 @@
 -module(convert).
--export([string_to_dna/1, dna_to_string/1, string_to_rna/1, rna_to_string/1, string_to_protein/1, protein_to_string/1]).
+-export([string_to_dna/1, list_of_strings_to_dna/1, dna_to_string/1, string_to_rna/1, rna_to_string/1, string_to_protein/1, protein_to_string/1]).
 
+-spec list_of_strings_to_dna([string()]) -> [types:dnas()].
 -spec string_to_dna(string()) -> types:dnas().
 -spec dna_to_string(types:dnas()) -> string().
 -spec string_to_rna(string()) -> types:rnas().
 -spec rna_to_string(types:rnas()) -> string().
 -spec string_to_protein(string()) -> types:proteins().
 -spec protein_to_string(types:proteins()) -> string().
+
+list_of_strings_to_dna(List_of_strings) ->
+	list_of_strings_to_dna(List_of_strings, []).
+
+list_of_strings_to_dna([], Result) ->
+	lists:reverse(Result);
+list_of_strings_to_dna([String | Rest_of_strings], Result) ->
+	Dna = string_to_dna(String),
+	list_of_strings_to_dna(Rest_of_strings, [Dna | Result]).
+
 
 string_to_dna(String) ->
 	string_to_dna(String, []).

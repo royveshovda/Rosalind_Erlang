@@ -1,6 +1,8 @@
 -module(prot).
 -export([rna_to_protein/1]).
 
+-spec rna_to_protein(types:rnas()) -> types:proteins().
+
 rna_to_protein(Rna) ->
 	rna_to_protein(Rna, []).
 
