@@ -1,10 +1,35 @@
 -module(splc).
--export([test/0, test2/0]).
+-export([test/0, run/0]).
+
+
+run() ->
+	Dna_string = "ATGCCTCGTAGTTGGCAGAGTCGGTACTCTCAAGGTCGCATCTGCTTTTGATGTGGTAGCCGAGGCTGTTCCCCCGCTAGCCAGTGGGCACTGACTGCTCAATACTGCACGCTGCCGCGTATGGGCCTTCCAAGGTCGGTCCACATCAGCCGCACCTGCACAATGGTTATGTGGAGCCCTTCGGAGGGAAATATCGATAACGGCAGAACCGCGGAGTCTGTGGCAGCGATTACCAGCAACCTGATGACCTGCGTCCCGCTTAAGGTAGGGGAATGGTGTTCTTGTGAACCAGGGGGCAGCTACCGGAACCATCACACCTCAGTCCGTGAAGTCGAAGGCGCTATAACGGGGTACGAAAAGTTAGGTGTTAAACGCAATAGTCGTGGAAGCCTTGACTTCGGCTGCCAGACGCCCTGACTGCAAGAGAATTGAGCACGCGAGGTTACCCCTATATATTTACGAACCGTCTTCCTAACTCCCATACTCGCAGGAGTTCGTCAGGGAACACACGACACCAGAAACGCGCTTCAGATTTTCGTTATGGTGGACTAGGTCAACACCTCTATCGCTGGGTTTCGCGCAATGCATGGAGACAGCAATTGGCAATCGGATCCGCATTCGCATGGTCACTGAGACCAGGAGTCATATGGCGGGTACTCTCAATATTGGGGCCTTGATTGTGTTCTATATTTGCCACAATGTCAAGGAACCGACTGCACGGCTGGAACACTGAAGTTTGACATCAAACGAATAGCGAGCACTTTGCGCAGGTTAACTGAATGCCTCAATACACCCTGCACCCATCTTGACCATCGTTCCCAAGAATTAACTCTGCGAGTAAACACGGTCCAGCTCACAGCCGCCCGAGCGTACAGTTTTCTTTCGGTGTTAGCGTTAGTACTAGTGATTGATCTCCATTTGAGAATATAGACCCAAACGCATAGTCGTGAGGAGACAGCCAGTCCAGCGTGTAGTAAGCGCACCCGTTGA",
+	Dna = convert:string_to_dna(Dna_string),
+	Intron_strings = 	[
+							"CGAGGTTACCCCTAT",
+							"ATCTGCTTTTGATGTGGTAGCCGAGGCTGTTCCCCCGCTAG",
+							"GTCCGTGAAGTCGAAGGCGCTATAACGGGGTACGAAAAG",
+							"AATAGTCGTGGAAGCCTTGACTTCGGCTGCCAGACGCCCTG",
+							"CATACTCGCAGGAGTTCGTCAGGGAACAC",
+							"AAATATCGATAACGGCAGAACCGCGGAGTCT",
+							"TCGCTGGGTTTCGCGCAATGCATGGAGACAGCAA",
+							"TGATTGTGTT",
+							"TTAACTCTGCGAGTAAACACGGTCCAGCTCACAGCCGC",
+							"ACTAGTGATTGATCTCCATTTGAGAATATAGACCCAAACGCAT",
+							"CAGCCGCACCTG",
+							"GCCGCGTATGGGCCT",
+							"AAACGAATAGCGAGCACTTTGCGCAGGTTAACTGAATGCCTC",
+							"CCAGGAGTCATATGGCGGGTA",
+							"CCGCTTAAGGTAGGGGAATGGTGTTCT"
+						],
+	Introns = convert:list_of_strings_to_dna(Intron_strings),
+	New_Dna = remove_introns(Dna, Introns),
+	Rna = rna:transcribe(New_Dna),
+	Protein = prot:rna_to_protein(Rna),
+	basic:print_protein(Protein).
 
 test() ->
-
-	%Dna_string = "ATGGTCTACATAGCTGACAAACAGCACGTAGCAATCGGTCGAATCTCGAGAGGCATATGGTCACATGATCGGTCGAGCGTGTTTCAAAGTTTGCGCCTAG",
-	Dna_string = "ATGGTCTACATAGCTGACAAACAGCACGTAGCATCTCGAGAGGCATATGGTCACATGTTCAAAGTTTGCGCCTAG",
+	Dna_string = "ATGGTCTACATAGCTGACAAACAGCACGTAGCAATCGGTCGAATCTCGAGAGGCATATGGTCACATGATCGGTCGAGCGTGTTTCAAAGTTTGCGCCTAG",
 	Dna = convert:string_to_dna(Dna_string),
 	Intron_strings = 	[
 							"ATCGGTCGAA",
@@ -14,17 +39,14 @@ test() ->
 	New_Dna = remove_introns(Dna, Introns),
 	Rna = rna:transcribe(New_Dna),
 	Protein = prot:rna_to_protein(Rna),
-	basic:print_protein(Protein).
 
+	ExpectedProtein = get_expected_protein(),
+	Protein = ExpectedProtein,
+	perfect.
 
-
-test2() ->
-	Dna_string = "ATGGTCTACAGTCTACA",
-	Intron_string = "GTCTA",
-	%Expect: ATGCACA
-	Dna = convert:string_to_dna(Dna_string),
-	Intron = convert:string_to_dna(Intron_string),
-	remove_intron(Dna, Intron).
+ get_expected_protein() ->
+ 	Sting = "MVYIADKQHVASREAYGHMFKVCA.",
+ 	convert:string_to_protein(Sting).
 
 
 remove_introns(Dna, []) ->
@@ -45,18 +67,17 @@ remove_sub_strings(String, Starting_positions, Length) ->
 remove_sub_strings2(String, [], _Length) ->
 	String;
 remove_sub_strings2(String, [Last_starting_position | Rest_of_starting_positions], Length) ->
-	New_string = remove_sub_string(String, Last_starting_position, Length),
+	New_string = remove_sub_list(String, Last_starting_position, Length),
 	remove_sub_strings2(New_string, Rest_of_starting_positions, Length).
 
-remove_sub_string(String, Starting_position, Length) ->
-	Part1 = lists:sublist(String, 1, Starting_position),
-	Part2 = lists:sublist(String, Starting_position+Length),
+remove_sub_list(String, Starting_position, Length) ->
+	Part1 = lists:sublist(String, 1, Starting_position-1),
+	ListLength = length(String),
+	Part2 = lists:sublist(String, Starting_position+Length, ListLength),
 	Part1++Part2.
 
-
-
 %MVYIADKQHVASREAYGHMFKVCA
-
+%MVYIADKQHVASREAYGHMFKVCA
 
 %ATGGTCTACATAGCTGACAAACAGCACGTAGCATCTCGAGAGGCATATGGTCACATGTTCAAAGTTTGCGCCTAG
 
