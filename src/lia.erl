@@ -38,7 +38,7 @@ problem(K,N,Sum) ->
 % """
 %     return 1 - sum([P(n, k) for n in range(N)])
 
-
+% {{{
 
 p(N, K) ->
 	Binomial = binomial(math:pow(2, K), N),
@@ -58,7 +58,7 @@ p(N, K) ->
 % """
 %     return binomial(2**k, n) * 0.25**n * 0.75**(2**k - n)
 
-
+%}}}
 
 binomial(N, K) when K > (N-K) ->
 	K_new = N-K,
