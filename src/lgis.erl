@@ -19,6 +19,9 @@ test() ->
 	Perm5 = [1,4,2,3],
 	[1,2,3] = get_longest_increasing_subsequence(Perm5),
 
+	Perm6 = [1,2,3,4,9,5,6],
+	[1,2,3,4,5,6] = get_longest_increasing_subsequence(Perm6),
+
 	perfect.
 
 get_longest_increasing_subsequence(List) ->
@@ -26,16 +29,11 @@ get_longest_increasing_subsequence(List) ->
 
 get_longest_increasing_subsequence([], Result) ->
 	lists:reverse(Result);
-get_longest_increasing_subsequence([Head|Tail], []) ->
-	get_longest_increasing_subsequence(Tail,[Head]);
-
 get_longest_increasing_subsequence([Head1,Head2|Tail],[RHead|_RTail] = Result) when Head2 > Head1, Head1 > RHead ->
 	get_longest_increasing_subsequence([Head2|Tail], [Head1|Result]);
-
 get_longest_increasing_subsequence([Head1,Head2|Tail],[RHead|_RTail] = Result) when Head2 =< Head1, Head1 > RHead ->
 	Cand1 = get_longest_increasing_subsequence(Tail, [Head1|Result]),
 	Cand2 = get_longest_increasing_subsequence(Tail, [Head2|Result]),
-	
 	L1 = length(Cand1),
 	L2 = length(Cand2),
 
@@ -45,8 +43,13 @@ get_longest_increasing_subsequence([Head1,Head2|Tail],[RHead|_RTail] = Result) w
 		false ->
 			Cand2
 	end;
-
-	get_longest_increasing_subsequence([_Head|Tail],[_RHead|_RTail] = Result) when _Head =< _RHead ->
+get_longest_increasing_subsequence([Head|Tail], []) ->
+	get_longest_increasing_subsequence(Tail,[Head]);
+get_longest_increasing_subsequence([Head|Tail], [RHead|_RTail] = Result) when Head > RHead ->
+	get_longest_increasing_subsequence(Tail, [Head|Result]);
+get_longest_increasing_subsequence([_Head|Tail], [_RHead|_RTail] = Result) when _Head =< _RHead ->
+	get_longest_increasing_subsequence(Tail, Result);
+get_longest_increasing_subsequence([_Head|Tail],[_RHead|_RTail] = Result) when _Head =< _RHead ->
 	get_longest_increasing_subsequence(Tail, Result).
 %1,3,4
 %1,3
@@ -54,3 +57,9 @@ get_longest_increasing_subsequence([Head1,Head2|Tail],[RHead|_RTail] = Result) w
 %1,2
 %
 %3,4
+%
+%print_list([]) ->
+%	io:format("~n");
+%print_list([Head|Tail]) ->
+%	io:format("~p ", [Head]),
+%	print_list(Tail).
