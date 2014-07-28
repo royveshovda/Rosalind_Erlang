@@ -10,7 +10,6 @@
 remove_dups([])    -> [];
 remove_dups([H|T]) -> [H | [X || X <- remove_dups(T), X /= H]].
 
-%{{{
 remove_line_breaks(String) ->
 	remove_line_breaks(String, []).
 
@@ -22,7 +21,6 @@ remove_line_breaks([$\n|Rest], RemovedString) ->
 	remove_line_breaks(Rest, RemovedString);
 remove_line_breaks([Character|Rest], RemovedString) ->
 	remove_line_breaks(Rest, [Character|RemovedString]).
-%}}}
 
 open_fasta_file(Filename) ->
 	{ok, Binary} = file:read_file(Filename),

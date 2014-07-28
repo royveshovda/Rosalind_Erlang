@@ -1,5 +1,5 @@
 -module(lcsm).
--export([test1/0, test2/0, process_batch/4]).
+-export([test1/0, test2/0, process_batch/4, find_longest/1]).
 
 test1() ->
 	List = [1,2,3,4,5,6],
@@ -13,12 +13,16 @@ test2() ->
 	Filename = "./testdata/rosalind_lcsm.txt",
 	Dnas = basic:open_fasta_file(Filename),	
 	Lists = get_dna_lists(Dnas),
+	Longest = find_longest(Lists),
+	io:format("~n~nResult:~n"),
+	basic:print_dna(Longest).
+
+find_longest(Lists) ->
 	[Dna1|RestOfDnas] = Lists,
 	Batches = generate_batches(Dna1),
 	create_workers(lists:reverse(Batches), RestOfDnas, 0),
 	Longest = process_responses(length(Batches)),
-	io:format("~n~nResult:~n"),
-	basic:print_dna(Longest).
+	Longest.
 
 
 create_workers([], _RestOfDnas, _SerialNumber) ->
