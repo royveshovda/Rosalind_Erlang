@@ -6,7 +6,6 @@
 -spec remove_dups(list()) -> list().
 -spec open_fasta_file(string()) -> [types:dna_with_id()]. 
 
-
 remove_dups([])    -> [];
 remove_dups([H|T]) -> [H | [X || X <- remove_dups(T), X /= H]].
 
