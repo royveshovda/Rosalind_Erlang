@@ -105,8 +105,3 @@ longest(_Candidate1, Candidate2) when _Candidate1 =< Candidate2 ->
 find_longest(List) ->
 	SortedList = lists:sort(List),
 	lcsm:find_longest([List, SortedList]).
-
-%longest(Candidate1, _Candidate2) when length(Candidate1) > length(_Candidate2) ->
-%	Candidate1;
-%longest(_Candidate1, Candidate2) when length(_Candidate1) =< length(Candidate2) ->
-%	Candidate2.
